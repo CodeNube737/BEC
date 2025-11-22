@@ -25,12 +25,9 @@
 ### Digital Input Controls
 Connect switches/sensors between Arduino pins and GND (active LOW):
 - Arduino Pin 4 → Forward command switch
-- Arduino Pin 5 → Backward command switch (NOTE: conflicts with ENB, see note below)
+- Arduino Pin 3 → Backward command switch
 - Arduino Pin 6 → Left turn command switch
 - Arduino Pin 7 → Right turn command switch
-
-**IMPORTANT NOTE**: Pin 5 is used for both INPUT_BACKWARD and RIGHT_MOTOR_ENABLE. 
-If your H-bridge requires a separate enable pin for the right motor, use Pin 3 instead for INPUT_BACKWARD, or remap the pins as needed.
 
 ### Power Connections
 
@@ -80,21 +77,7 @@ If your H-bridge requires a separate enable pin for the right motor, use Pin 3 i
     Pin 4 ----[Switch]---- GND  (Forward)
     Pin 6 ----[Switch]---- GND  (Left)
     Pin 7 ----[Switch]---- GND  (Right)
-    Pin 3 ----[Switch]---- GND  (Backward) - if Pin 5 conflicts
-```
-
-## Pin Remapping Suggestion (to avoid conflicts)
-
-If you need all 4 inputs on separate pins from motor control:
-
-```cpp
-// Suggested remapping:
-const int INPUT_FORWARD = 4;
-const int INPUT_BACKWARD = 3;  // Changed from 5 to 3
-const int INPUT_LEFT = 6;
-const int INPUT_RIGHT = 7;
-
-const int RIGHT_MOTOR_ENABLE = 5;  // Keep as is for PWM
+    Pin 3 ----[Switch]---- GND  (Backward)
 ```
 
 ## Testing Procedure

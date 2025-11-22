@@ -39,6 +39,7 @@ int targetLeftSpeed = 0;          // Target PWM value for left motors
 int targetRightSpeed = 0;         // Target PWM value for right motors
 
 const int MAX_SPEED = 255;        // Maximum PWM value (full speed)
+const int TURN_SPEED_RATIO = 2;   // Speed reduction for turning (divider: 2 = 50%, 3 = 33%, etc.)
 const int RAMP_RATE = 5;          // Speed change per iteration (lower = smoother)
 const int RAMP_DELAY = 20;        // Delay between speed updates (ms)
 
@@ -86,6 +87,8 @@ void loop() {
   bool rightPressed = (digitalRead(INPUT_RIGHT) == LOW);
   
   // Determine desired direction based on inputs
+  // Priority: Forward/Backward takes precedence over turning for safety
+  // (prevents diagonal movement which could be unpredictable)
   Direction desiredDirection = STOP;
   
   if (forwardPressed && !backwardPressed) {
@@ -132,7 +135,7 @@ void setDirection(Direction dir) {
     case LEFT_TURN:
       Serial.println("LEFT");
       setMotorDirection(true, false, true, true);  // Left backward, right forward
-      targetLeftSpeed = MAX_SPEED / 2;             // Slower turn
+      targetLeftSpeed = MAX_SPEED / TURN_SPEED_RATIO;  // Adjust turn speed
       targetRightSpeed = MAX_SPEED;
       break;
       
@@ -140,7 +143,7 @@ void setDirection(Direction dir) {
       Serial.println("RIGHT");
       setMotorDirection(true, true, true, false);  // Left forward, right backward
       targetLeftSpeed = MAX_SPEED;
-      targetRightSpeed = MAX_SPEED / 2;            // Slower turn
+      targetRightSpeed = MAX_SPEED / TURN_SPEED_RATIO;  // Adjust turn speed
       break;
       
     case STOP:
