@@ -1,0 +1,6 @@
+# Cache Cowboys - Requirements
+# This project uses only Python standard library
+# No external dependencies required for core functionality
+
+# For development/testing (optional)
+# pytest>=7.0.0
