@@ -1,0 +1,147 @@
+===============================================================================
+  ARDUINO UNO R3 MOTOR CONTROLLER - CONNECTION SCHEMATIC
+  BEC Sand Dune Searcher Project
+===============================================================================
+
+ARDUINO UNO R3                          H-BRIDGE MOTOR DRIVER (e.g., L298N)
++-----------------+                     +----------------------------------+
+|                 |                     |                                  |
+|  DIGITAL PINS   |                     |  CONTROL INPUTS                  |
+|                 |                     |                                  |
+|  Pin 8  --------|-------------------->| IN1  (Left Motor Dir 1)          |
+|  Pin 9  --------|-------------------->| IN2  (Left Motor Dir 2)          |
+|  Pin 10 --------|-------------------->| ENA  (Left Motor PWM Speed)      |
+|                 |                     |                                  |
+|  Pin 11 --------|-------------------->| IN3  (Right Motor Dir 1)         |
+|  Pin 12 --------|-------------------->| IN4  (Right Motor Dir 2)         |
+|  Pin 5  --------|-------------------->| ENB  (Right Motor PWM Speed)     |
+|                 |                     |                                  |
+|  GND ---------->|-------------------->| GND  (Common Ground)             |
+|                 |                     |                                  |
+|                 |                     |  MOTOR OUTPUTS                   |
+|                 |                     |                                  |
+|                 |                     | OUT1 }---- LEFT MOTOR SET        |
+|                 |                     | OUT2 }     (2 wheels parallel)   |
+|                 |                     |                                  |
+|                 |                     | OUT3 }---- RIGHT MOTOR SET       |
+|                 |                     | OUT4 }     (2 wheels parallel)   |
+|                 |                     |                                  |
+|                 |                     |  POWER INPUT                     |
+|                 |                     |                                  |
+|                 |       +------------>| VCC (Motor Power 6-12V)          |
+|                 |       |             | GND (Motor Ground)               |
++-----------------+       |             +----------------------------------+
+                          |
+INPUT SWITCHES            |              MOTOR POWER SUPPLY
+(Active LOW)              |              +------------------+
+                          |              |                  |
+Pin 4 ---[Switch]--- GND  |              |  (+) 6-12V DC    |
+     (Forward)            +--------------|  (-)             |
+                                         +------------------+
+Pin 3 ---[Switch]--- GND                           |
+     (Backward)                                    |
+                                              Common GND
+Pin 6 ---[Switch]--- GND
+     (Left Turn)
+
+Pin 7 ---[Switch]--- GND
+     (Right Turn)
+
+
+===============================================================================
+  MOTOR WIRING - PARALLEL CONNECTION
+===============================================================================
+
+LEFT SIDE WHEELS (2 motors in parallel):
+    Motor 1 (+) ----\
+                    |---- H-bridge OUT1
+    Motor 2 (+) ----/
+
+    Motor 1 (-) ----\
+                    |---- H-bridge OUT2
+    Motor 2 (-) ----/
+
+RIGHT SIDE WHEELS (2 motors in parallel):
+    Motor 3 (+) ----\
+                    |---- H-bridge OUT3
+    Motor 4 (+) ----/
+
+    Motor 3 (-) ----\
+                    |---- H-bridge OUT4
+    Motor 4 (-) ----/
+
+
+===============================================================================
+  POWER SUPPLY NOTES
+===============================================================================
+
+1. Motor Power: 6-12V DC (depends on motor specifications)
+   - Check motor voltage rating
+   - Ensure current capacity > total motor draw
+   - Typical: 2A per motor × 4 motors = 8A minimum recommended
+
+2. Arduino Power:
+   - Option A: USB cable from computer (programming/testing only)
+   - Option B: External 7-12V to VIN pin (when mobile)
+   - Option C: 5V to 5V pin (if H-bridge has 5V regulator output)
+
+3. Common Ground: CRITICAL - All grounds must be connected together
+   - Arduino GND
+   - H-bridge Logic GND
+   - H-bridge Motor Power GND
+   - Motor Power Supply GND
+
+
+===============================================================================
+  PIN SUMMARY
+===============================================================================
+
+Arduino Pin | Function              | Connects To
+------------+-----------------------+-----------------------------------
+3           | Input - Backward      | Switch to GND
+4           | Input - Forward       | Switch to GND
+5           | PWM - Right Motor     | H-bridge ENB
+6           | Input - Left Turn     | Switch to GND
+7           | Input - Right Turn    | Switch to GND
+8           | Left Motor Dir 1      | H-bridge IN1
+9           | Left Motor Dir 2      | H-bridge IN2
+10          | PWM - Left Motor      | H-bridge ENA
+11          | Right Motor Dir 1     | H-bridge IN3
+12          | Right Motor Dir 2     | H-bridge IN4
+GND         | Ground                | H-bridge GND, Power Supply GND
+
+
+===============================================================================
+  COMPONENT CHECKLIST
+===============================================================================
+
+[✓] Arduino Uno R3
+[✓] H-bridge Motor Driver (L298N or equivalent)
+[✓] 4 DC Motors (matched pairs recommended)
+[✓] Motor Power Supply (6-12V, adequate current)
+[✓] 4 Switches/Buttons (for direction control)
+[✓] Jumper wires (male-to-male and male-to-female)
+[✓] Breadboard (optional, for switch connections)
+[ ] Power cables (appropriate gauge for motor current)
+[ ] Mounting hardware (for motors and controller)
+[ ] Optional: 100nF capacitors for motor noise filtering
+
+
+===============================================================================
+  TESTING SEQUENCE
+===============================================================================
+
+1. Connect Arduino to computer via USB (NO motors yet)
+2. Upload motor_controller.ino
+3. Open Serial Monitor (9600 baud)
+4. Verify "Motor Controller Initialized" message
+5. Test each switch input - verify Serial Monitor shows direction changes
+6. Disconnect USB
+7. Connect H-bridge to Arduino (still NO motors)
+8. Power Arduino + H-bridge
+9. Measure voltages at H-bridge outputs with multimeter
+10. Connect motors
+11. Test each direction with wheels off ground
+12. Test full operation with robot on ground
+
+===============================================================================
