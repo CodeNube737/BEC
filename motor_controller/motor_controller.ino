@@ -79,6 +79,7 @@ void setup() {
   Serial.println("Ready for commands");
 }
 
+// Main control loop
 void loop() {
   // Read digital inputs (active LOW due to pull-up resistors)
   bool forwardPressed = (digitalRead(INPUT_FORWARD) == LOW);
