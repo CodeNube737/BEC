@@ -7,7 +7,6 @@ to avoid "cowboy coding" practices in cache management.
 """
 
 import time
-from functools import lru_cache
 from typing import Any, Optional, Callable
 from collections import OrderedDict
 
@@ -74,7 +73,8 @@ class CacheManager:
         """
         # Evict oldest item if at capacity
         if key not in self._cache and len(self._cache) >= self.max_size:
-            self._cache.popitem(last=False)
+            evicted_key, _ = self._cache.popitem(last=False)
+            del self._timestamps[evicted_key]
         
         self._cache[key] = value
         self._cache.move_to_end(key)
